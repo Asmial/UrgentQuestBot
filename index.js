@@ -120,4 +120,3 @@ function sendquest(date, title, description) {
 }
 
 client.login(process.env.BOT_TOKEN)
-//console.log(emojiHour(new Date(Date.now())))

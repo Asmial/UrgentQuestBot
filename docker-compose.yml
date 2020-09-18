@@ -1,0 +1,9 @@
+version: '3'
+
+services: 
+    urgentquestbot:
+        build: .
+        env_file: 
+            - ./.env
+        volumes: 
+            - $HOME/.secrethub/credential:/home/node/.secrethub/credential
