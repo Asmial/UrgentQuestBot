@@ -4,9 +4,11 @@ RUN apk update && apk add --repository https://alpine.secrethub.io/alpine/edge/m
 WORKDIR /app
 
 COPY . .
-RUN npm install
+RUN npm install \
+    && chown -R node:node .secrethub
 
 USER node
+RUN mv .secrethub $HOME/.secrethub
 
 ENTRYPOINT ["secrethub", "run", "--"]
 CMD ["npm", "start"]
