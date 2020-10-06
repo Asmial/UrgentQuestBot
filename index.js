@@ -1,7 +1,7 @@
 const https = require('https')
 const Discord = require('discord.js')
 const schedule = require('node-schedule')
-const parse = require('node-html-parser')
+const cheerio = require('cheerio')
 //const secret = require('./secret.json')
 const client = new Discord.Client();
 const fs = require('fs');
@@ -24,22 +24,23 @@ function fillQuests(startDate) {
             rawData += chunk
         })
         res.on('end', () => {
-            root = parse(rawData)
-            page = root.querySelector("li.sr:nth-child(1) > div:nth-child(2) > div:nth-child(3) > a:nth-child(4)").attributes['onclick'].value.replace(/\(ShowDetails\('/gi, '').replace(/'.*/gi, '')
+            const $ = cheerio.load(rawData)
+            page = $("li.sr:nth-child(1) > div:nth-child(2) > div:nth-child(3) > a:nth-child(4)").attr('onclick').replace(/\(ShowDetails\('/gi, '').replace(/'.*/gi, '')
             url = "https://pso2.com/news/urgent-quests/" + page
+            console.log(url)
             https.get(url, (res) => {
                 var rawData = ''
                 res.on('data', (chunk) => {
                     rawData += chunk
                 })
                 res.on('end', () => {
-                    var root = parse(data)
-                    var iframes = root.querySelectorAll("iframe")
+                    const $ = cheerio.load(rawData)
+                    var iframes = $("iframe")
                     var src = ''
                     for (let i = 0; i < iframes.length; i++) {
                         const iframe = iframes[i];
-                        if (iframe.src.includes("calendar.google.com")) {
-                            src = iframe.src
+                        if (iframe.attribs['src'].includes("calendar.google.com")) {
+                            src = iframe.attribs['src']
                             break
                         }
                     }
