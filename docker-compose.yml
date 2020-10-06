@@ -4,3 +4,6 @@ services:
   urgentquestbot:
     build: 
       context: .
+    volumes:
+        - '$HOME/.secrethub/credential:/home/node/.secrethub/credential'
+    env_file: .env 
